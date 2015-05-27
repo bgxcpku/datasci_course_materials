@@ -4,7 +4,7 @@ import json
 def lines(fp):
     print str(len(fp.readlines()))
 
-def sent_lib(fp):
+def read_score(fp):
     scores = {} # initialize an empty dictionary
     for line in fp:
         term, score  = line.split("\t")  # The file is tab-delimited. "\t" means "tab character"
@@ -12,29 +12,31 @@ def sent_lib(fp):
     return scores
 #   print scores.items() # Print every (term, score) pair in the dictionary
 
+def give_score(fp,scores):
+    score_all = []
+    new_score = 0
+    for line in fp:
+        new = json.loads(line).get('text','')
+        for word in new.split():
+            new_score += scores.get(word, 0) 
+        score_all.append(new_score)
+    return score_all
+
 def main():
     sent_file = open(sys.argv[1])
     tweet_file = open(sys.argv[2])
-    data = []
-    score = []
-    scores = sent_lib(sent_file)
-    for line in tweet_file:
-        new = json.loads(line).get('text','')
-        new_score = 0
-        for word in new.split():
-            new_score+= scores.get(word, 0) 
-        data.append(new)
-        score.append(new_score)
-    print type(data)
-    print data[1]
-    print type(data[1])
+    score_all = give_score(tweet_file,read_score(sent_file))
+    print sum(score_all)
+
+    
+#    print type(data)
+#    print data[1]
+#    print type(data[1])
 #    print score
 #    print data
 #    print scores
-    print sum(score)
 #    print score
-    print scores.get("cool",0)
-    print word
+
 if __name__ == '__main__':
     main()
  
