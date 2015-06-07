@@ -1,9 +1,6 @@
 import sys
 import json
 
-def lines(fp):
-    print str(len(fp.readlines()))
-
 def read_score(fp):
     scores = {} # initialize an empty dictionary
     for line in fp:
@@ -14,9 +11,9 @@ def read_score(fp):
 
 def give_score(fp,scores):
     score_all = []
-    new_score = 0
     for line in fp:
         new = json.loads(line).get('text','')
+        new_score = 0
         for word in new.split():
             new_score += scores.get(word, 0) 
         score_all.append(new_score)
